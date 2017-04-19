@@ -6,7 +6,7 @@
     "gitbook": ">=3.2.2"
   },
   "dependencies": {
-    "gitbook-plugin-search": ">=2.0.0",
+    "gitbook-plugin-search": ">=2.0.0"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "license": "BSD 3-clause New or Revised License",
   "bugs": {
     "url": "https://github.com/hamishwillee/theme-dronecode/issues"
-  }
+  },
   
   "gitbook": {
     "properties": {
