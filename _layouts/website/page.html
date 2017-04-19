@@ -3,17 +3,17 @@
 {% block head %}
     {{ super() }}
     <!-- added by my theme hamish -->
-    <meta name="AddedByHamish" content="true"/>
     <meta name="HandheldFriendly" content="true"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{ "images/apple-touch-icon-precomposed-152.png"|resolveAsset }}">
-    <link rel="shortcut icon" href="{{ "images/favicon.ico"|resolveAsset }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ "favicon.ico"|resolveAsset }}" type="image/x-icon">
     <!-- end added by my theme hamish -->
 {% endblock %}
 
 {% block body %}
     {{ super() }}
     <h1>HAMISH IS AWESOME</h1>
+    {{ summary }}
 {% endblock %}
