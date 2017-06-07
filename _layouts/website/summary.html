@@ -1,0 +1,87 @@
+{% macro articles(_articles) %}
+    {% for article in _articles %}
+        <li class="chapter {% if article.path == file.path and not article.anchor %}active{% endif %}" data-level="{{ article.level }}" {% if article.path %}data-path="{{ article.path|resolveFile }}"{% endif %}>
+            {% if article.path and getPageByPath(article.path) %}
+                <a href="{{ article.path|resolveFile }}{{ article.anchor }}">
+            {% elif article.url %}
+                <a target="_blank" href="{{ article.url }}">
+            {% else %}
+                <span>
+            {% endif %}
+                    {% if article.level != "0" and config.pluginsConfig['theme-default'].showLevel %}
+                        <b>{{ article.level }}.</b>
+                    {% endif %}
+                    {{ article.title }}
+            {% if article.path  or article.url %}
+                </a>
+            {% else %}
+                </span>
+            {% endif %}
+
+            {% if article.articles.length > 0 %}
+            <ul class="articles">
+                {{ articles(article.articles, file, config) }}
+            </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro toc() %}
+    <div class="toc_wrapper" style="padding-left:20px;">
+    {% for part in summary.parts %}
+        {% if part.title %}
+        <li class="header">{{ part.title }}</li>
+        {% elif not loop.first %}
+        <li class="divider"></li>
+        {% endif %}
+        {{ articles(part.articles, file, config) }}
+    {% endfor %}
+    </div>
+{% endmacro %}
+
+
+<ul class="summary">
+    {% set _divider = false %}
+    {% if config.links.sidebar  %}
+    {% for linkTitle, link in config.links.sidebar  %}
+        {% set _divider = true %}
+        <li>
+            <a href="{{ link }}" target="_blank" class="custom-link">{{ linkTitle }}</a>
+        </li>
+    {% endfor %}
+    {% endif %}
+
+    {% if _divider %}
+    <li class="divider"></li>
+    {% endif %}
+
+    <!-- Display toc at top if it is not a supported library --> 
+    {% if book.book_id not in ['docs.px4','dev.px4','docs.qgc','dev.qgc','dev.mavlink','minimal_test_gitbook'] %} {{ toc() }} {% endif %}
+
+    <!-- block of libraries added to sidebar --> 
+    {% block external_libraries %}  
+    <!-- <li class="divider"></li> -->
+    <li class="external_library" style="font-weight:bold;">{{ "USERGUIDE_LINK_PX4"|t }} </li>
+        {% if book.book_id  == 'docs.px4' %} {{ toc() }} {% endif %}
+    <li class="external_library" style="font-weight:bold;">{{ "USERGUIDE_LINK_QGC"|t }} </li>
+        {% if book.book_id  == 'docs.qgc' %} {{ toc() }} {% endif %}
+    <li class="external_library" style="font-weight:bold;">{{ "DEVGUIDE_LINK_PX4"|t }} </li>
+        {% if book.book_id  == 'dev.px4' %} {{ toc() }} {% endif %}
+    <li class="external_library" style="font-weight:bold;">{{ "DEVGUIDE_LINK_QGC"|t }} </li>
+        {% if book.book_id  == 'dev.qgc' %} {{ toc() }} {% endif %}
+    <li class="external_library" style="font-weight:bold;">{{ "USERGUIDE_LINK_MINIMAL_TEST"|t }} </li>
+      {% if book.book_id  == 'minimal_test_gitbook' %} {{ toc() }} {% endif %}
+    <li class="external_library" style="font-weight:bold;">{{ "DEVGUIDE_LINK_MAVLINK"|t }} </li>
+      {% if book.book_id  == 'dev.mavlink' %} {{ toc() }} {% endif %}
+    {% endblock %}
+    
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            {{ "GITBOOK_LINK"|t }}
+        </a>
+    </li>
+</ul>
